@@ -34,10 +34,13 @@ const checkPermissions = function(req, res, next)  {
 
 router.use(checkPermissions);
 
+
 router.get('/admin/products/create', productController.create);
-router.post('/admin/products/create', upload.none(), productController.store);
+router.post('/admin/products/create', productController.store);
 router.get('/admin/products/:id/delete', productController.delete);
 router.get('/admin/products/search', productController.search);
+router.get('/admin/products/update/:id',productController.showUpdateForm);
+router.post('/admin/products/update/:id',productController.update);
 
 router.get('*', (req, res) => {
     res.render('admin/errors/404.ejs')

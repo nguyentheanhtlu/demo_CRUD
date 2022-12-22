@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://127.0.0.1:27017/ecommert').catch(err => {
+mongoose.connect('mongodb+srv://theanh:theanh3012@theanh.ord0sxz.mongodb.net/ecommert').catch(err => {
     console.log('error database connection')
 });
+
 
 module.exports = mongoose;

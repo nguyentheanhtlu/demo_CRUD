@@ -8,6 +8,7 @@ passport.use(new LocalStrategy({
     // kiem tra tai khoan password
 try {
     let user = await UserModel.find({
+
         email: username,
         password: password
     })

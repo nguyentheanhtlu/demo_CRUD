@@ -39,15 +39,23 @@ class Product {
                 description: req.body.description,
                 category: req.body.category,
                 price: req.body.price,
+                image : req.files.image ? req.files.image.name : '',
                 content: req.body.content,
             })
+            if(req.files.image.name) {
+                await req.files.image.mv('./public/uploads/' + req.files.image.name)
+            }
             req.flash('message', 'Create product successfully!')
             res.redirect('/admin/products')
+
+
         }catch (e) {
+            console.log(1234)
             let messageValidation = {
-                name: e.errors['name'].message,
-                price: e.errors['price'].message
+                name: e.errors['name'] ? e.errors['name'].message : '',
+                price: e.errors['price'] ? e.errors['price'].message : ''
             }
+
             console.log(messageValidation)
             req.flash('errors', messageValidation)
             res.redirect('/admin/products/create')
@@ -84,6 +92,44 @@ class Product {
         }
 
     }
+    async showUpdateForm(req, res,next) {
+        try {
+            const product = await ProductModel.findOne({_id: req.params.id});
+            const categories = await CategoryModel.find();
+            if (product) {
+                res.render("admin/products/update.ejs", {data: {product, categories}});
+            } else {
+                res.render('error')
+            }
+        } catch (e) {
+            next(e)
+        }
+
+    }
+    async update(req, res,next) {
+        try {
+            const product = await ProductModel.findOne({_id: req.params.id});
+            console.log(product)
+            product.name = req.body.name;
+            product.description = req.body.description;
+            product.content = req.body.content;
+            product.price = req.body.price;
+            product.image = req.files.image.name;
+            product.category = req.body.category;
+            await product.save();
+            if (product) {
+                res.redirect("/admin/products");
+            } else {
+                res.render("error");
+            }
+        } catch (err) {
+            next(err);
+        }
+    }
+
+
+
+
 }
 
 module.exports = Product

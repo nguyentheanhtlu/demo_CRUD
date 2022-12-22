@@ -7,6 +7,9 @@ const flash = require('connect-flash');
 const Sentry = require('@sentry/node');
 const Tracing = require('@sentry/tracing');
 const router = require('./src/routes/web');
+const fileUpload = require('express-fileupload')
+
+
 
 const app = express();
 
@@ -14,11 +17,16 @@ app.set('views', path.join(__dirname, './views'));
 app.set('view engine', 'ejs');
 
 app.use(express.static( 'public'));
+app.use(fileUpload({
+    createParentPath: true
+}));
+
 
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false,
+
 
 }));
 app.use(flash());
@@ -33,7 +41,7 @@ app.use(function(req,res,next){
 })
 
 Sentry.init({
-    dsn: "https://c464a3968c5d4de6bfbbbe80f4d8a7c5@o4504336658726912.ingest.sentry.io/4504336660234241",
+    dsn: "https://d575aee6bf144dc38acf7e9d07d67418@o4504358896467968.ingest.sentry.io/4504358898106368",
     integrations: [
         // enable HTTP calls tracing
         new Sentry.Integrations.Http({ tracing: true }),
